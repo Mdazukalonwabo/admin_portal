@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <span class="float-right"><i class="fas fa-map-marker-alt"></i><span id="location" class="ml-3"></span></span>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="container-fluid">
+        <div class="row">
+            <h3>HI {{ current_user.first_name }}</h3>
+            <div class="col-12 notification"><span class="green">5</span> new messages <a href="#" class="float-right green">respond</a></div>
+            <div class="col-12 notification"><span class="green">5</span> accounts pending <a href="{{ url_for('users.pending_accounts') }}" class="float-right green">respond</a></div>
+            <div class="col-12 notification"><span class="green">5</span> leave requests <a href="#" class="float-right green">respond</a></div>
+        </div>
+        <div class="row check-in-container">
+            <div class="col-12">
+                <h4>check in/out</h4>
+            </div>
+            <div class="col check-in"><a href="#"><i class="fas fa-building"></i></a></div>
+            <div class="col check-in"><a href="#"><i class="fas fa-home"></i></a></div>
+            <div class="col check-in"><a href="#"><i class="fas fa-utensils"></i></a></div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script src="{{ url_for('static', filename='javascript/location.js') }}"></script>
+{% endblock script %}

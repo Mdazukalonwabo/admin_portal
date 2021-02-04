@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        {% if users %}
+            {% for user in users %}
+                <div class="row accounts">
+                    <div class="col-12 account">
+                        {% for image_path in images %}
+                            {% if image_path['username'] == user.username %}
+                                <img class="rounded-circle account-img" src="{{ image_path['image_path'] }}">
+                            {% endif %}
+                        {% endfor %}
+                        <div class="account-details">
+                            <h2 class="account-heading">{{ user.username }}</h2>
+                            <p class="text-secondary">{{ user.email }}</p>
+                        </div>
+                        <form method="POST" action="" enctype="multipart/form-data">
+<!--            csrf_token-->
+            {{ form.hidden_tag() }}
+
+            <fieldset class="form-group">
+                <div class="form-check">
+                    {{ form.active(class="form-check-input") }}
+                    {{ form.active.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info btn-account", id='1') }}
+                </div>
+        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <h1>No unactive users</h1>
+        {% endif %}
+    </div>
+    <div class="modal fade" id="active-account-form-modal" tabindex="-1" role="dialog" aria-labelledby="activeAccountFormModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content p-3">
+       <!--      for encording images correctly enctype="multipart/form-data"-->
+        <form method="POST" action="" enctype="multipart/form-data">
+<!--            csrf_token-->
+            {{ form.hidden_tag() }}
+
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" id="#c19">Update Account Info</legend>
+                <div class="form-check">
+                    {{ form.active(class="form-check-input") }}
+                    {{ form.active.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+        </form>
+      </div>
+      </div>
+    </div>
+
+
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+
+    $("input").click(function(e){
+        var idClicked = e.target.id;
+
+        var content =
+            {
+              name: "Donald Duck",
+              city: "Duckburg"
+            };
+        $.post(window.location.href,content,function(result){alert(result);});
+    });
+</script>
+{% endblock script %}

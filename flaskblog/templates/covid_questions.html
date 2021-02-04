@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+<!--            csrf_token-->
+            {{ form.hidden_tag() }}
+
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Covid-19 Questionnaire</legend>
+                <div class="form-group">
+                    {{ form.temperature.label(class="form-control-label") }}
+<!--                    <div class="form-check">-->
+                        {{ form.temperature(class="form-control form-control-lg") }}
+<!--                    </div>-->
+                </div>
+                <div class="form-group">
+                    {{ form.Shortness_of_breath.label(class="form-check-label") }}
+                    {% if form.Shortness_of_breath.errors %}
+                        {{ form.Shortness_of_breath(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Shortness_of_breath.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.Shortness_of_breath(class="form-control form-control-lg") }}
+                    {% endif %}
+
+                </div>
+
+                <div class="form-group">
+                    {{ form.loss_of_taste_or_smell.label(class="form-check-label") }}
+                    {% if form.loss_of_taste_or_smell.errors %}
+                        {{ form.loss_of_taste_or_smell(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.loss_of_taste_or_smell.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.loss_of_taste_or_smell(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.sore_throat.label(class="form-check-label") }}
+                    {% if form.sore_throat.errors %}
+                        {{ form.sore_throat(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.sore_throat.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.sore_throat(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.contact_with_Covid.label(class="form-check-label") }}
+                    {% if form.contact_with_Covid.errors %}
+                        {{ form.contact_with_Covid(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.contact_with_Covid.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.contact_with_Covid(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.nasal_congestion.label(class="form-check-label") }}
+                    {% if form.nasal_congestion.errors %}
+                        {{ form.nasal_congestion(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.nasal_congestion.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.nasal_congestion(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.diarrhea.label(class="form-check-label") }}
+                    {% if form.diarrhea.errors %}
+                        {{ form.diarrhea(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.diarrhea.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.diarrhea(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.nausea.label(class="form-check-label") }}
+                    {% if form.nausea.errors %}
+                        {{ form.nausea(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.nausea.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.nausea(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group mt-5">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </div>
+{% endblock content %}

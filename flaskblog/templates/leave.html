@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row leave-options">
+    <div class="col-12 mb-3"><h2>Request leave</h2></div>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Sick Leave">
+        Sick leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Annual Leave">
+        Annual leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Study Leave">
+        Study leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Family responsibility Leave">
+        Family responsibility leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Compensation Leave">
+        Compensation leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Unpaid Leave">
+        Unpaid leave
+    </button>
+    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Other Leave">
+        Other leave
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="leave-form-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content p-3">
+        <form method="POST" action="" id="leave-form">
+<!--            csrf_token-->
+            {{ form.hidden_tag() }}
+
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4" id="heading"></legend>
+                <div class="form-group">
+                {{ form.leave_type.label() }}
+                {{ form.leave_type(class="form-control-file", id="leaveTypeField") }}
+                {% if form.leave_type.errors  %}
+                  {% for error in form.leave_type.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                  {% endfor %}
+                {% endif %}
+              </div>
+                <div class="form-group">
+                    {{ form.message.label(class="form-control-label") }}
+<!--                    checking if there are any errors to the form field-->
+                    {% if form.message.errors %}
+                        {{ form.message(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.message.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.message(class="form-control form-control-lg") }}
+                    {% endif %}
+<!--                    end check-->
+                </div>
+                <div class="form-group">
+                    {{ form.start_date.label(class="form-control-label") }}
+<!--                    checking if there are any errors to the form field-->
+                    {% if form.start_date.errors %}
+                        {{ form.start_date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.start_date.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.start_date(class="form-control form-control-lg") }}
+                    {% endif %}
+<!--                    end check-->
+                </div>
+                <div class="form-group">
+                    {{ form.end_date.label(class="form-control-label") }}
+<!--                    checking if there are any errors to the form field-->
+                    {% if form.end_date.errors %}
+                        {{ form.end_date(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.end_date.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.end_date(class="form-control form-control-lg") }}
+                    {% endif %}
+<!--                    end check-->
+                </div>
+                <div class="form-group">
+                {{ form.certificate.label() }}
+                {{ form.certificate(class="form-control-file") }}
+                {% if form.certificate.errors  %}
+                  {% for error in form.certificate.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                  {% endfor %}
+                {% endif %}
+              </div>
+                <div class="form-check">
+                    {{ form.authorisation(class="form-check-input") }}
+                    {{ form.authorisation.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info" , id="submit") }}
+                </div>
+        </form>
+      </div>
+      </div>
+    </div>
+</div>
+{% endblock content %}
+{% block script %}
+<script>
+    $(document).ready(function() {
+        document.getElementById("leaveTypeField").setAttribute("readonly", "true");
+        document.getElementById("submit").disabled = true;
+     });
+
+    $("button").click(function(e){
+        var idClicked = e.target.attributes[4].nodeValue;
+        document.getElementById("heading").innerText = idClicked
+        document.getElementById("leaveTypeField").value = idClicked
+    });
+
+    function formValidation(){
+
+    }
+
+</script>
+{% endblock script %}
