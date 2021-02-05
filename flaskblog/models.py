@@ -4,6 +4,13 @@ from flask_login import UserMixin
 import enum
 
 
+class UserRole(enum.Enum):
+    visitor = 'visitor'
+    student = 'student'
+    staff = 'staff'
+    business_unit = 'business_unit'
+
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -21,11 +28,17 @@ class User(db.Model, UserMixin):
     address = db.Column(db.String(120))
     active = db.Column(db.Boolean, nullable=False, default=False)
 
-    #   creating a one-to-one relationship to the Leave class
-    Leaves = db.relationship("LeaveApplication", backref='leave', lazy=True)
+    user_type = db.Column(db.Enum(UserRole), default=UserRole.visitor, nullable=False)
+
+    # #   creating a one-to-one relationship to the Leave class
+    # leaves = db.relationship("LeaveApplication", backref='leave', lazy=True)
 
     #   creating a one-to-one relationship to the CovidQuestionnaire class
     covid_question = db.relationship("CovidQuestionnaire", backref='covid', lazy=True)
+
+    students = db.relationship("Student", backref='students', lazy=True)
+
+    staff_members = db.relationship("StaffMember", backref='staff_members', lazy=True)
 
     def __repr__(self):
         return f"User '{self.username}', '{self.email}', '{self.image_file}'"
@@ -34,6 +47,46 @@ class User(db.Model, UserMixin):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.filter_by(id=user_id).first()
+
+
+class Student(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    #   creating a one-to-one relationship to the Leave class
+    projects = db.relationship("StudentProjects", backref='projects', lazy=True)
+
+
+class StudentProjects(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    project_name = db.Column(db.String(20), nullable=False)
+    student_number = db.Column(db.Integer, nullable=True)
+
+
+class StaffMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    bank_name = db.Column(db.String(20), nullable=True)
+    account_holder_name = db.Column(db.String(20), nullable=True)
+    account_number = db.Column(db.Integer, nullable=True)
+    branch_name = db.Column(db.String(20), nullable=True)
+    branch_number = db.Column(db.Integer, nullable=True)
+    WorkPermit_number = db.Column(db.String(20), nullable=True)
+    tax_number = db.Column(db.Integer, nullable=True)
+    chronic_condition = db.Column(db.String(50), nullable=True)
+    allergies = db.Column(db.String(50), nullable=True)
+
+    #   creating a one-to-one relationship to the Leave class
+    leaves = db.relationship("LeaveApplication", backref='leave', lazy=True)
+
+# class Staff(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#
+#
+# class BusinessUnit(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 # Covid Questionnaire
@@ -66,8 +119,9 @@ class LeaveType(enum.Enum):
 
 # Leave Application
 class LeaveApplication(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('staff_member.id'), nullable=False)
     category = db.Column(db.Enum(LeaveType), nullable=False)
     pre_authorisation = db.Column(db.Boolean, nullable=False, default=False)
     personal_message = db.Column(db.Text, nullable=False)

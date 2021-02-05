@@ -2,13 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
-# CONGIFIGURATIONS
+# configuration
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'f13b194786abc813d7b007bb56fad163'
 # Creating a database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://sbsghgfk:cLnUBFytdp_RuQR25R6YloO3mnUIgQGl@raja.db.elephantsql.com:5432/sbsghgfk'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://fyxlflqu:6N7SBz2TTk2LdL84gFwRVwl7TDfxvldE@ziggy.db.elephantsql.com:5432/fyxlflqu'
 db = SQLAlchemy(app)
+# migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)   # manages login sessions
 login_manager.login_view = 'users.login'

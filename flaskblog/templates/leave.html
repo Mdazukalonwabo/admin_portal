@@ -2,22 +2,22 @@
 {% block content %}
 <div class="row leave-options">
     <div class="col-12 mb-3"><h2>Request leave</h2></div>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Sick Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Sick Leave">
         Sick leave
     </button>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Annual Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Annual Leave">
         Annual leave
     </button>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Study Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Study Leave">
         Study leave
     </button>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Family responsibility Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Family responsibility Leave">
         Family responsibility leave
     </button>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Compensation Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Compensation Leave">
         Compensation leave
     </button>
-    <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Unpaid Leave">
+    <button type="button" class="btn btn-primary col-4" data-toggle="modal" data-target="#leave-form-modal" value="Unpaid Leave">
         Unpaid leave
     </button>
     <button type="button" class="btn btn-primary col-12" data-toggle="modal" data-target="#leave-form-modal" value="Other Leave">
@@ -109,12 +109,26 @@
       </div>
     </div>
 </div>
+<div class="row">
+    {% for leave in leaves %}
+    <div class="col-12 col-md-6 leaves-col">
+        <h6>leave type</h6>
+        {{ leave.category.value[0] }}
+        <h6>leave message</h6>
+        {{ leave.personal_message }}
+        <h6>starting date</h6>
+        {{ leave.leave_date_from }}
+        <h6>end date</h6>
+        {{ leave.leave_date_to }}
+    </div>
+    {% endfor %}
+</div>
 {% endblock content %}
 {% block script %}
 <script>
     $(document).ready(function() {
         document.getElementById("leaveTypeField").setAttribute("readonly", "true");
-        document.getElementById("submit").disabled = true;
+<!--        document.getElementById("submit").disabled = true;-->
      });
 
     $("button").click(function(e){

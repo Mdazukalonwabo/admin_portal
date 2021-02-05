@@ -52,6 +52,16 @@
                     {% endif %}
 <!--                    end check-->
                 </div>
+
+                <div class="form-group">
+                    <label class="form-control-label">You are: </label>
+                    <select class="form-control" id="rating" name="type">
+                        <option value="visitor" selected>visitor</option>
+                        <option value="student">student</option>
+                        <option value="staff" >staff</option>
+                        <option value="business_unit">business_unit</option>
+                    </select>
+                </div>
                  <div class="form-group">
                     {{ form.phone_number.label(class="form-control-label") }}
                     <!--                    checking if there are any errors to the form field-->

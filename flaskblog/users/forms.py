@@ -16,7 +16,7 @@ class RegistrationForm(FlaskForm):
     last_name = StringField('Last Name', validators=[DataRequired(), Length(min=2, max=20)])
     phone_number = StringField('Number', validators=[DataRequired(), Length(min=10, max=13)])
     id_number = StringField('ID Number', validators=[DataRequired(), Length(min=13, max=13)])
-
+    type = StringField('Role', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 
@@ -31,6 +31,11 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError("This email already exist. Please try logging in.")
+
+    def validate_id_number(self, id_number):
+        user = User.query.filter_by(ID_number=id_number.data).first()
+        if user:
+            raise ValidationError("This id number already exist")
 
 
 class LoginForm(FlaskForm):

@@ -1,7 +1,7 @@
 import os
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flaskblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, ActiveAccountForm
-from flaskblog.models import User
+from flaskblog.models import User, Student, StaffMember
 from flaskblog import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog.users.utlis import save_picture
@@ -20,23 +20,44 @@ def register():
         try:
             # create a hashed version of the users password
             hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
+
+            # set the account active if the new user is a visitor the account will be activated
+            if form.type.data == 'visitor':
+                active = True
+            else:
+                active = False
+            print(active)
             # create an instance of the new user into the database
             user = User(username=form.username.data, email=form.email.data, password=hashed_password,
                         ID_number=form.id_number.data, first_name=form.first_name.data, last_name=form.last_name.data,
-                        phone_number=form.phone_number.data)
+                        phone_number=form.phone_number.data, active=active, user_type=form.type.data)
+
             db.session.add(user)
             db.session.commit()
+            user_tables(form.type.data, user)
             # once the user has been successfully registered
             flash(f'Your account has been created!', 'success')
             # will be redirected to login page
-            return redirect(url_for('users.registeration_success'))
-        except exc.IntegrityError:
+            return redirect(url_for('users.registration_success'))
+        except exc.IntegrityError as e:
+            flash(e)
             return render_template('register.html', title="Register", form=form)
     return render_template('register.html', title="Register", form=form)
 
 
+# this function is used to add the users that are not visitors to their respective table
+def user_tables(user_type, user):
+    if user_type == "student":
+        student = Student(user_id=user.id)
+        db.session.add(student)
+    elif user_type == "staff" or "business_unit":
+        staff = StaffMember(user_id=user.id)
+        db.session.add(staff)
+    return db.session.commit()
+
+
 @users.route('/registration-success')
-def registeration_success():
+def registration_success():
     return render_template('registration_success.html')
 
 
@@ -76,7 +97,7 @@ def login():
 @users.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('users.login'))
 
 
 @users.route('/account', methods=['GET', 'POST'])
@@ -122,7 +143,10 @@ def account():
 @users.route("/pending-accounts", methods=['GET', 'POST'])
 @login_required
 def pending_accounts():
-    inactive_users = User.query.filter_by(active=False)
+    inactive_users = User.query.all()
+    for i in inactive_users:
+        print(i.active)
+    # print(inactive_users)
     user_image_paths = []
     for user in inactive_users:
         i = {
