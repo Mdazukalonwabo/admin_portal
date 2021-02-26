@@ -75,4 +75,4 @@ class UpdateAccountForm(FlaskForm):
 
 class ActiveAccountForm(FlaskForm):
     active = BooleanField("Activate Account")
-    submit = SubmitField("Submit")
+    submit = SubmitField("Activate")

@@ -23,7 +23,7 @@ class CovidQuestionsForm(FlaskForm):
 class LeaveRequestForm(FlaskForm):
     start_date = DateField("From", format='%Y-%m-%d')
     end_date = DateField("to")
-    certificate = FileField("Upload Doctor's Certificate", validators=[FileAllowed(['jpg', 'png'])])
+    certificate = FileField("Upload Doctor's Certificate", validators=[FileAllowed(['jpg', 'png', 'doc', 'pdf'])])
     authorisation = BooleanField("Pre Authorised")
     message = StringField('Please specify')     # validators=[DataRequired()])
     leave_type = StringField('Leave type')

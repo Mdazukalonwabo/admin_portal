@@ -1,10 +1,14 @@
 import os
 from flask import render_template, url_for, flash, redirect, request, Blueprint
+
 from flaskblog.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, ActiveAccountForm
 from flaskblog.models import User, Student, StaffMember
 from flaskblog import app, db, bcrypt
-from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog.users.utlis import save_picture
+from flaskblog.users.user_type import permissions
+
+from flask_login import login_user, current_user, logout_user, login_required
+
 from sqlalchemy import exc
 
 
@@ -26,7 +30,6 @@ def register():
                 active = True
             else:
                 active = False
-            print(active)
             # create an instance of the new user into the database
             user = User(username=form.username.data, email=form.email.data, password=hashed_password,
                         ID_number=form.id_number.data, first_name=form.first_name.data, last_name=form.last_name.data,
@@ -84,6 +87,7 @@ def login():
                 return redirect(next_page) if next_page else return redirect(url_for('home'))
                 """
                 if next_page:
+
                     return redirect(next_page)
                 # will be redirected to this page
                 return redirect(url_for('automation.covid_questionnaire'))
@@ -143,9 +147,7 @@ def account():
 @users.route("/pending-accounts", methods=['GET', 'POST'])
 @login_required
 def pending_accounts():
-    inactive_users = User.query.all()
-    for i in inactive_users:
-        print(i.active)
+    inactive_users = User.query.filter_by(active=False).all()
     # print(inactive_users)
     user_image_paths = []
     for user in inactive_users:
@@ -154,8 +156,20 @@ def pending_accounts():
             "image_path": url_for('static', filename=f'media/profile_pics/{user.image_file}')
         }
         user_image_paths.append(i)
+    return render_template('pending_accounts.html', users=inactive_users, images=user_image_paths)
+
+
+@users.route("/pending-accounts/<int:user_id>", methods=["GET", "POST"])
+@login_required
+def activate_pending_account(user_id):
     form = ActiveAccountForm()
+    user = User.query.filter_by(id=user_id).first()
     if form.validate_on_submit():
-        print(request.data)
-        print(form.active.data)
-    return render_template('pending_accounts.html', form=form, users=inactive_users, images=user_image_paths)
+        user.active = form.active.data
+        db.session.commit()
+        if form.active.data:
+            flash(f"{user.email}'s account has been activated", 'success')
+        if not form.active.data:
+            flash(f"{user.email}'s account has not been activated", 'warning')
+        return redirect(url_for("users.pending_accounts"))
+    return render_template('activate_account.html', form=form, user=user)

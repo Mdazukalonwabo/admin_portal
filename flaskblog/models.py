@@ -2,6 +2,7 @@ from datetime import datetime
 from flaskblog import db, login_manager
 from flask_login import UserMixin
 import enum
+# from werkzeug import generate_password_hash, check_password_hash
 
 
 class UserRole(enum.Enum):
@@ -47,6 +48,12 @@ class User(db.Model, UserMixin):
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.filter_by(id=user_id).first()
+
+    # def set_password(self, password):
+    #     self.password = generate_password_hash(password)
+    #
+    # def check_password(self, password):
+    #     return check_password_hash(self.password, password)
 
 
 class Student(db.Model):

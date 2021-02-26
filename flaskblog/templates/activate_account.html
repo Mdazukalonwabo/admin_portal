@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{{ user.username }}
+<form method="POST" action="" enctype="multipart/form-data">
+<!--            csrf_token-->
+            {{ form.hidden_tag() }}
+
+            <fieldset class="form-group">
+                <div class="form-check">
+                    {{ form.active(class="form-check-input") }}
+                    {{ form.active.label(class="form-check-label") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info btn-account", id='1') }}
+                </div>
+</form>
+{% endblock content %}

@@ -17,6 +17,7 @@ def leave():
     leave_applied = LeaveApplication.query.all()
     if form.validate_on_submit():
         user = StaffMember.query.filter_by(user_id=current_user.id).first()
+        print(form.certificate.data)
         leave_application = LeaveApplication(user_id=user.id, category=search(form.leave_type.data),
                                              pre_authorisation=form.authorisation.data,
                                              personal_message=form.message.data, leave_date_from=form.start_date.data,
